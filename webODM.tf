@@ -9,7 +9,7 @@ terraform {
   }
   backend "azurerm" {
     resource_group_name  = "odm-rsg"
-    storage_account_name = "20220307tfstate"
+    #storage_account_name = Stored as a GitHub secret 
     container_name       = "tfstates"
     key                  = "terraform.tfstate"
   }
@@ -75,7 +75,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "${chomp(data.http.icanhazip.body)}/32"
+    source_address_prefix      = "0.0.0.0/0"
     destination_address_prefix = "*"
   }
   /* */
@@ -87,7 +87,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "8000"
-    source_address_prefix      = "${chomp(data.http.icanhazip.body)}/32"
+    source_address_prefix      = "0.0.0.0/0"
     destination_address_prefix = "*"
   }
 }
