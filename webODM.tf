@@ -8,7 +8,7 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = "odm-rg"
+    resource_group_name  = "odm-rsg"
     storage_account_name = "20220307tfstate"
     container_name       = "tfstates"
     key                  = "terraform.tfstate"
