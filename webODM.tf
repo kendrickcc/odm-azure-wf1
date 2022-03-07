@@ -120,10 +120,10 @@ resource "azurerm_linux_virtual_machine" "rg" {
     caching              = "ReadWrite"
     disk_size_gb         = var.diskSizeGB
   }
-  admin_ssh_key {
+  /*admin_ssh_key {
     username   = var.adminUser
     public_key = file(var.pub_key_loc)
-  }
+  }*/
 }
 /*
 resource "azurerm_virtual_machine_extension" "linux_vm" {
