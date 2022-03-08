@@ -3,7 +3,7 @@ name: B - Terraform Apply
 on: workflow_dispatch
 
 jobs:
-  terraform_apply:
+  terraform:
     name: "Terraform apply"
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
@@ -21,7 +21,8 @@ jobs:
 
     - name: Terraform init
       run: |
-        terraform init -input=false -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME}}"
+        terraform init -input=false \
+          -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME}}"
 
     - name: Terraform validation
       run: terraform validate
