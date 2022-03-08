@@ -19,7 +19,7 @@ provider "azurerm" {
 }
 locals {
   common_tags = {
-    environment = "${var.repo_nanme}"
+    environment = "${var.repo_name}"
     project     = "${var.project}"
     Owner       = "${var.repo_owner}"
   }
