@@ -118,6 +118,10 @@ resource "azurerm_linux_virtual_machine" "rg" {
     caching              = "ReadWrite"
     disk_size_gb         = var.diskSizeGB
   }
+  admin_ssh_key {
+    username   = var.adminUser
+    public_key = var.pub_key_data
+  }
 }
 output "azurerm_public_ip" {
   value = azurerm_public_ip.public_ip.ip_address
