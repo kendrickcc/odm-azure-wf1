@@ -16,13 +16,18 @@ terraform {
 }
 provider "azurerm" {
   features {}
-  default_tags {
-    tags = {
-      Name    = var.repo_name # Important to use capital "N" for Name as this will automatically display in the consoles default tag
-      Owner   = var.repo_owner
-      Project = var.project
-    }
+}
+locals {
+  common_tags = {
+    environment = "${var.repo_nanme}"
+    project     = "${var.project}"
+    Owner       = "${var.repo_owner}"
   }
+  /*
+  extra_tags  = {
+    network = "${var.network1_name}"
+    support = "${var.network_support_name}"
+  }*/
 }
 #-------------------------------
 # Get cloud-init template file
@@ -37,6 +42,7 @@ data "template_file" "user_data" {
 resource "azurerm_resource_group" "rg" {
   name     = "${var.prefix}-rsg"
   location = var.location
+  tags     = merge(local.common_tags)
 }
 resource "azurerm_public_ip" "public_ip" {
   name                = "${var.prefix}-public-ip"
