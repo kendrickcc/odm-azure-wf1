@@ -8,10 +8,10 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = "odm-rsg"
+    resource_group_name = "odm-rsg"
     #storage_account_name = Stored as a GitHub secret 
-    container_name       = "tfstates"
-    key                  = "terraform.tfstate"
+    container_name = "tfstates"
+    key            = "terraform.tfstate"
   }
 }
 provider "azurerm" {
@@ -78,7 +78,6 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "0.0.0.0/0"
     destination_address_prefix = "*"
   }
-  /* */
   security_rule {
     name                       = "AllowWebODMInBound"
     priority                   = 400
@@ -114,34 +113,12 @@ resource "azurerm_linux_virtual_machine" "rg" {
     sku       = var.sku
     version   = var.skuVersion
   }
-
   os_disk {
     storage_account_type = var.storageAccountType
     caching              = "ReadWrite"
     disk_size_gb         = var.diskSizeGB
   }
-  /*admin_ssh_key {
-    username   = var.adminUser
-    public_key = file(var.pub_key_loc)
-  }*/
 }
-/*
-resource "azurerm_virtual_machine_extension" "linux_vm" {
-  name                       = "${var.prefix}-run-command"
-  virtual_machine_id         = azurerm_linux_virtual_machine.rg.id
-  publisher                  = "Microsoft.Azure.Extensions"
-  type                       = "CustomScript"
-  type_handler_version       = "2.0"
-  auto_upgrade_minor_version = true
-
-  settings = <<SETTINGS
-    {
-      "fileUris":["https://raw.githubusercontent.com/kendrickcc/ODM/main/script.sh"],
-      "commandToExecute":"./script.sh"
-    }
-    SETTINGS
-}
-*/
 output "azurerm_public_ip" {
   value = azurerm_public_ip.public_ip.ip_address
 }

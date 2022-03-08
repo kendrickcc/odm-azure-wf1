@@ -3,25 +3,30 @@ name: C - Terraform Ouput
 on: workflow_dispatch
 
 jobs:
-  terraform_output:
+  terraform_apply:
+    name: "Terraform output"
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
 
     - name: Verify Terraform version
       run: terraform --version
 
     - name: Terraform init
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: terraform init -input=false
+      run: |
+        terraform init -input=false -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME}}"
 
     - name: Terraform validation
       run: terraform validate
 
     - name: Terraform output
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: terraform output

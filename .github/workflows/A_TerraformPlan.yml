@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: 'Terraform plan'
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
@@ -19,7 +19,7 @@ jobs:
         shell: bash
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
 
     - name: Verify Terraform version
       run: terraform --version
