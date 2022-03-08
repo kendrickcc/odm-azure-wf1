@@ -16,6 +16,13 @@ terraform {
 }
 provider "azurerm" {
   features {}
+  default_tags {
+    tags = {
+      Name    = var.repo_name # Important to use capital "N" for Name as this will automatically display in the consoles default tag
+      Owner   = var.repo_owner
+      Project = var.project
+    }
+  }
 }
 #-------------------------------
 # Get cloud-init template file

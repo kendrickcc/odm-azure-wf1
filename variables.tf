@@ -1,3 +1,12 @@
+variable "repo_name" {
+  default = "odm-azure-wf1"
+}
+variable "repo_owner" {
+  default = "kendrickcc"
+}
+variable "project" {
+  default = "test build"
+}
 variable "pub_key" {
   default = "id_rsa_webodm"
 }
