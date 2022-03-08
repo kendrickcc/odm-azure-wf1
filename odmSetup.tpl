@@ -16,9 +16,6 @@ packages:
 # users
 users:
   - default
-  - name: ubuntu
-    ssh_authorized_keys:
-      - ${ssh_key} 
   - name: odm
     groups: sudo, docker
     ssh_authorized_keys:
