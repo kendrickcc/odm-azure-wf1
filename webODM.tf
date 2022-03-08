@@ -1,5 +1,6 @@
-# Configure the Azure provider
-# Configure the Microsoft Azure Provider
+#-------------------------------
+# Terraform provider and backend
+#-------------------------------
 terraform {
   required_providers {
     azurerm = {
@@ -17,6 +18,9 @@ terraform {
 provider "azurerm" {
   features {}
 }
+#-------------------------------
+# Define tags, edit in variables
+#------------------------------
 locals {
   common_tags = {
     environment = "${var.repo_name}"
@@ -38,24 +42,31 @@ data "template_file" "user_data" {
     ssh_key = var.pub_key_data
   }
 }
-# Create a resource group if it doesn't exist
+#-------------------------------
+# Create resource group
+#-------------------------------
 resource "azurerm_resource_group" "rg" {
   name     = "${var.prefix}-rsg"
   location = var.location
   tags     = merge(local.common_tags)
 }
+#-------------------------------
+# Networking
+#-------------------------------
 resource "azurerm_public_ip" "public_ip" {
   name                = "${var.prefix}-public-ip"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Dynamic"
   sku                 = "Basic"
+  tags                = merge(local.common_tags)
 }
 resource "azurerm_virtual_network" "rg" {
   name                = "${var.prefix}-network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
+  tags                = merge(local.common_tags)
 }
 resource "azurerm_subnet" "internal" {
   name                 = "internal"
@@ -67,18 +78,22 @@ resource "azurerm_network_interface" "rg" {
   name                = "${var.prefix}-nic"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.public_ip.id
   }
+  tags = merge(local.common_tags)
 }
+#-------------------------------
+# Network security group
+#-------------------------------
 resource "azurerm_network_security_group" "nsg" {
   name                = "${var.prefix}-nsg"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
+  tags                = merge(local.common_tags)
   /* when needed to connect to VM */
   security_rule {
     name                       = "SSH"
@@ -107,6 +122,9 @@ resource "azurerm_subnet_network_security_group_association" "sec_group" {
   subnet_id                 = azurerm_subnet.internal.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
+#-------------------------------
+# Create virtual machines
+#-------------------------------
 resource "azurerm_linux_virtual_machine" "rg" {
   name                = "${var.prefix}-vm"
   resource_group_name = azurerm_resource_group.rg.name
@@ -135,7 +153,11 @@ resource "azurerm_linux_virtual_machine" "rg" {
     username   = var.adminUser
     public_key = var.pub_key_data
   }
+  tags = merge(local.common_tags)
 }
+#-------------------------------
+# Outputs
+#-------------------------------
 output "azurerm_public_ip" {
   value = azurerm_public_ip.public_ip.ip_address
 }
