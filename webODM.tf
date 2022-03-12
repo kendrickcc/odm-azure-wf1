@@ -235,9 +235,9 @@ resource "azurerm_linux_virtual_machine" "nodeodm" {
 output "WebODM_public_ip_port_8000" {
   value = azurerm_linux_virtual_machine.webodm.*.public_ip_addresses
 }
-output "clusterodm_private_ip_addresses_port_8001" {
+output "ClusterODM_private_ip_addresses_port_8001" {
   value = azurerm_linux_virtual_machine.webodm.*.private_ip_addresses
 }
-output "nodeodm_private_ip_addresses_port_3000" {
+output "NodeODM_private_ip_addresses_port_3000" {
   value = azurerm_linux_virtual_machine.nodeodm.*.private_ip_addresses
 }
