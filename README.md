@@ -2,7 +2,6 @@
 
 ***DRAFT***
 
-
 Provision virtual machines in Azure to run OpenDroneMap. This can all be ran from GitHub using Actions. No need to install Terraform on a local machine. It uses storage account to manage the Terraform state file.
 
 A typical GitHub action will automatically run when a commit is posted. I opted to change the workflows to manual as I often only run a plan to check code, and more importantly, destroy the entire environment when done. I do not keep anything provisioned or running, aside from the storage account backend. The backend can be destroyed between builds. It is most needed when trying to destroy the environment.
@@ -43,7 +42,6 @@ This should open a browser for sign on to Azure. After logging in, should see th
   }
 ]
 ```
-
 #### Create Service Principal
 
 This account will be used from GitHub to interact with Azure. Using AZ CLI, run the following command: 
@@ -67,9 +65,29 @@ Output if successful will provide login credentials. This is sensitive informati
   "managementEndpointUrl": "https://management.core.windows.net/"
 }
 ```
+#### Create Storage Account
 
+My preference is to create a separate resource group for the storage account, the create the account. Again, can be faster using CLI.
 
-### Create SSH keys
+	az group create -n tfstate-rg -l centralus
+	az storage account create -n githubtfstate -g tfstate-rg -l centralus --sku Standard_LRS
+ 
+ 
+#### Create SSH keys
+
+Use `ssh-keygen` to create a new SSH key. Suggest using a different name other than the default `id_rsa`. This project uses `id_rsa_webodm`. The name of the key is important. If using something other than `id_rsa_webodm` then care must be taken to make sure the name matches throughout the repository and in GitHub.
+
+## GitHub setup
+
+In the repository, navigate to `Settings` - `Secrets` - `Actions`. Create new secrets for the following:
+```
+- AZURE_AD_CLIENT_ID 	  - upload the clientId
+- AZURE_AD_CLIENT_SECRET  - upload the clientSecret
+- AZURE_AD_TENANT_ID	  - upload the tenantId
+- AZURE_SUBSCRIPTION_ID   - upload the subscriptionId or a different subscription ID
+- ID_RSA_WEBODM		  - upload the contents of the public key generated
+- STORAGE_ACCOUNT_NAME	  - name of the storage account
+```
 
 ### Plan
 
