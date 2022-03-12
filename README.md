@@ -8,7 +8,7 @@ A typical GitHub action will automatically run when a commit is posted. I opted 
 
 This build also uses ***cloud-init*** to configure the instances, using file `webodm.tpl` and `nodeodm.tbl`. It is important to note that the build will indicate complete but the machine will still need time to download containers and launch. More information on [cloud-init](https://cloud-init.io). This has taken about 5 minutes for all containers to download and launch.
 
-Why Terraform: This provides a fresh clean build for each project. And can easily be decommissioned to save on cloud costs. It allows for testing of software upgrades that may come. In addition, some changes can be made on the fly once provisioned. Port 22 is left closed, but can easily be opened if needed, then simply running the Apply workflow to enable. If changes are made outside of Terraform, i.e. in the AWS Dashboard, then the Destroy workflow may not work. 
+Why Terraform: This provides a fresh clean build for each project. And can easily be decommissioned to save on cloud costs. It allows for testing of software upgrades that may come. In addition, some changes can be made on the fly once provisioned. Port 22 is left closed, but can easily be opened if needed, then simply running the Apply workflow to enable. If changes are made outside of Terraform, i.e. in the web portal, then the Destroy workflow may not work. 
 
 ## Setup
 
