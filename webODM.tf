@@ -36,8 +36,14 @@ locals {
 #-------------------------------
 # Get cloud-init template file
 #-------------------------------
-data "template_file" "user_data" {
-  template = file("odmSetup.tpl")
+data "template_file" "webodm" {
+  template = file("webodm.tpl")
+  vars = {
+    ssh_key = var.pub_key_data
+  }
+}
+data "template_file" "nodeodm" {
+  template = file("nodeodm.tpl")
   vars = {
     ssh_key = var.pub_key_data
   }
@@ -94,7 +100,7 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   tags                = merge(local.common_tags)
-  /* when needed to connect to VM */
+  # /* when needed to connect to VM 
   security_rule {
     name                       = "SSH"
     priority                   = 300
@@ -105,7 +111,7 @@ resource "azurerm_network_security_group" "nsg" {
     destination_port_range     = "22"
     source_address_prefix      = "0.0.0.0/0"
     destination_address_prefix = "*"
-  }
+  } # */
   security_rule {
     name                       = "AllowWebODMInBound"
     priority                   = 400
@@ -117,6 +123,17 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "0.0.0.0/0"
     destination_address_prefix = "*"
   }
+  security_rule {
+    name                       = "AllowClusterODMInBound"
+    priority                   = 401
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8001"
+    source_address_prefix      = "0.0.0.0/0"
+    destination_address_prefix = "*"
+  }
 }
 resource "azurerm_subnet_network_security_group_association" "sec_group" {
   subnet_id                 = azurerm_subnet.internal.id
@@ -125,8 +142,8 @@ resource "azurerm_subnet_network_security_group_association" "sec_group" {
 #-------------------------------
 # Create virtual machines
 #-------------------------------
-resource "azurerm_linux_virtual_machine" "rg" {
-  name                = "${var.prefix}-vm"
+resource "azurerm_linux_virtual_machine" "webodm" {
+  name                = "${var.prefix}-webodm-vm"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = var.vmSize
@@ -134,9 +151,39 @@ resource "azurerm_linux_virtual_machine" "rg" {
   network_interface_ids = [
     azurerm_network_interface.rg.id,
   ]
-  computer_name                   = "${var.prefix}-vm"
+  computer_name                   = "${var.prefix}-webodm-vm"
   disable_password_authentication = true
-  custom_data                     = base64encode(data.template_file.user_data.rendered)
+  custom_data                     = base64encode(data.template_file.webodm.rendered)
+
+  source_image_reference {
+    publisher = var.publisher
+    offer     = var.offer
+    sku       = var.sku
+    version   = var.skuVersion
+  }
+  os_disk {
+    storage_account_type = var.storageAccountType
+    caching              = "ReadWrite"
+    disk_size_gb         = var.diskSizeGB
+  }
+  admin_ssh_key {
+    username   = var.adminUser
+    public_key = var.pub_key_data
+  }
+  tags = merge(local.common_tags)
+}
+resource "azurerm_linux_virtual_machine" "nodeodm" {
+  name                = "${var.prefix}-nodeodm-vm"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  size                = var.vmSize
+  admin_username      = var.adminUser
+  network_interface_ids = [
+    azurerm_network_interface.rg.id,
+  ]
+  computer_name                   = "${var.prefix}-nodeodm-vm"
+  disable_password_authentication = true
+  custom_data                     = base64encode(data.template_file.nodeodm.rendered)
 
   source_image_reference {
     publisher = var.publisher
