@@ -169,7 +169,7 @@ resource "azurerm_subnet_network_security_group_association" "sec_group" {
 #-------------------------------
 resource "azurerm_linux_virtual_machine" "webodm" {
   name                = "${var.prefix}-webodm${count.index}-vm"
-  count               = length(var.webodm_servers)
+  count               = var.webodm_servers
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = var.vmSize
@@ -200,7 +200,7 @@ resource "azurerm_linux_virtual_machine" "webodm" {
 }
 resource "azurerm_linux_virtual_machine" "nodeodm" {
   name                = "${var.prefix}-nodeodm${count.index}-vm"
-  count               = length(var.nodeodm_servers)
+  count               = var.nodeodm_servers
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = var.vmSize
