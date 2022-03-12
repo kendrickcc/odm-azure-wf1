@@ -4,7 +4,7 @@ Provision virtual machines in Azure to run OpenDroneMap. This can all be ran fro
 
 A typical GitHub action will automatically run when a commit is posted. I opted to change the workflows to manual as I often only run a plan to check code, and more importantly, destroy the entire environment when done. I do not keep anything provisioned or running, aside from the storage account backend. The backend can be destroyed between builds. It is most needed when trying to destroy the environment.
 
-This build also uses ***cloud-init*** to configure the instances, using file `webodm.tpl` and `nodeodm.tbl`. It is important to note that the build will indicate complete but the machine will still need time to download containers and launch. More information on [cloud-init](https://cloud-init.io). This has taken about 5 minutes for all containers to download and launch.
+This build also uses ***cloud-init*** to configure the instances, using file `webodm.tpl` and `nodeodm.tpl`. It is important to note that the build will indicate complete but the machine will still need time to download containers and launch. More information on [cloud-init](https://cloud-init.io). This has taken about 5 minutes for all containers to download and launch.
 
 Why Terraform: This provides a fresh clean build for each project. And can easily be decommissioned to save on cloud costs. It allows for testing of software upgrades that may come. In addition, some changes can be made on the fly once provisioned. Port 22 is left closed, but can easily be opened if needed, then simply running the Apply workflow to enable. If changes are made outside of Terraform, i.e. in the web portal, then the Destroy workflow may not work. 
 
