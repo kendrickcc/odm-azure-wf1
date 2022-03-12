@@ -106,7 +106,7 @@ resource "azurerm_network_interface" "webodm" {
 }
 resource "azurerm_network_interface" "nodeodm" {
   name                = "${var.prefix}-nodeodm${count.index}-nic"
-  count               = length(var.nodeodm_servers)
+  count               = var.nodeodm_servers
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   ip_configuration {
