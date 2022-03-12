@@ -88,6 +88,13 @@ In the repository, navigate to `Settings` - `Secrets` - `Actions`. Create new se
 - ID_RSA_WEBODM		  - upload the contents of the public key generated
 - STORAGE_ACCOUNT_NAME	  - name of the storage account
 ```
+## Review build
+
+Terraform uses *.tf files to build the environment. File `variables.tf` is where you can adjust the build for your needs. Edit as needed to change the number of servers, the version of the servers and the project information. It is also important to verify the location where this will be provisioned. The `tpl` files are `cloud-init` build files that are executed on the servers. Here you can add packages and make other configuration changes as the servers come up. 
+
+## Execution
+
+In GitHub, navigate to `Actions`.
 
 ### Plan
 
