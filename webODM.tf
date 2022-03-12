@@ -233,7 +233,7 @@ resource "azurerm_linux_virtual_machine" "nodeodm" {
 # Outputs
 #-------------------------------
 output "azurerm_public_ip" {
-  value = azurerm_public_ip.webodm.*.ip_address
+  value = azurerm_linux_virtual_machine.webodm.*.azurerm_public_ip
 }
 output "nodeodm_private_ip_addresses" {
   value = azurerm_linux_virtual_machine.nodeodm.*.private_ip_addresses

@@ -26,7 +26,7 @@ variable "webodm_servers" {
 }
 variable "nodeodm_servers" {
   description = "Number of nodeODM servers"
-  default     = 1
+  default     = 2
 }
 variable "vmSize" {
   default = "Standard_D2s_v3"
