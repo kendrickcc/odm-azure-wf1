@@ -13,6 +13,62 @@ Why Terraform: This provides a fresh clean build for each project. And can easil
 
 ## Setup
 
+### Create Azure Service Principal and Store Account
+
+While possible using the web interface, this approach is a little more straightforward, but does require the installation of Azure CLI. Install Azure CLI per these instructions: (https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+
+#### AZ Login
+
+Assuming you already have a subscription in Azure created, use `az login` to login into Azure. If successful, you are returned with a JSON format.
+
+	az login
+
+This should open a browser for sign on to Azure. After logging in, should see the following output. 
+	
+```json	
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "id": "xxxxxxxx-XXXX-xxxx-XXXX-xxxxxxxxxxxx",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "sub01-prod",
+    "state": "Enabled",
+    "tenantId": "89axxxxx-53xx-41xx-91xx-cf43xxxxxxxx",
+    "user": {
+      "name": "you.username@live.com",
+      "type": "user"
+    }
+  }
+]
+```
+
+#### Create Service Principal
+
+This account will be used from GitHub to interact with Azure. Using AZ CLI, run the following command: 
+
+
+    az ad sp create-for-rbac --name "[name of service account]" --role Contributor --scopes /subscriptions/[Subscription ID from above or other subscription ID]
+	
+Output if successful will provide login credentials. This is sensitive information, handle carefully.
+
+```json
+{
+  "clientId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "clientSecret": "[client secret]",
+  "subscriptionId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "tenantId": "89axxxxx-53xx-41xx-91xx-cf43xxxxxxxx",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"
+}
+```
+
+
 ### Create SSH keys
 
 ### Plan
