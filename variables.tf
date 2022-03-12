@@ -15,7 +15,7 @@ variable "pub_key_data" {
 }
 variable "prefix" {
   description = "The prefix which should be used for all resources in this example"
-  default     = "odm-v4"
+  default     = "odmv5"
 }
 variable "location" {
   default = "centralus"
