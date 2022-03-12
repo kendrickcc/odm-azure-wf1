@@ -21,14 +21,12 @@ variable "location" {
   default = "centralus"
 }
 variable "webodm_servers" {
-  description = "Name(s) of WebODM/ClusterODM server."
-  type        = list(string)
-  default     = ["webodm"] # i.e. ["webodm","clusterodm"]
+  description = "Number of WebODM/ClusterODM servers."
+  default     = 1
 }
 variable "nodeodm_servers" {
-  description = "Names of nodeODM servers"
-  type        = list(string)
-  default     = ["nodeodm1", "nodeodm2"] # i.e. ["nodeodm1","nodeodm2","nodeodm3"]
+  description = "Number of nodeODM servers"
+  default     = 1
 }
 variable "vmSize" {
   default = "Standard_D2s_v3"

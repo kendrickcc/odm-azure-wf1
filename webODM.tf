@@ -8,7 +8,7 @@ terraform {
       version = "2.95.0"
     }
   }
-  /* disabling the backend
+  #/* disabling the backend
   backend "azurerm" {
     resource_group_name = "odm-rsg"
     #storage_account_name = Stored as a GitHub secret 
@@ -60,8 +60,18 @@ resource "azurerm_resource_group" "rg" {
 #-------------------------------
 # Networking
 #-------------------------------
-resource "azurerm_public_ip" "public_ip" {
-  name                = "${var.prefix}-public-ip"
+resource "azurerm_public_ip" "webodm" {
+  name                = "${var.prefix}-webodm${count.index}-pip"
+  count = var.webodm_servers
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Dynamic"
+  sku                 = "Basic"
+  tags                = merge(local.common_tags)
+}
+resource "azurerm_public_ip" "nodeodm" {
+  name                = "${var.prefix}-nodeodm${count.index}-pip"
+  count = var.nodeodm_servers
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Dynamic"
@@ -83,14 +93,14 @@ resource "azurerm_subnet" "internal" {
 }
 resource "azurerm_network_interface" "webodm" {
   name                = "${var.prefix}-webodm${count.index}-nic"
-  count               = length(var.webodm_servers)
+  count               = var.webodm_servers
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.public_ip.id
+    public_ip_address_id          = azurerm_public_ip.webodm[count.index].id
   }
   tags = merge(local.common_tags)
 }
@@ -103,7 +113,7 @@ resource "azurerm_network_interface" "nodeodm" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.public_ip.id
+    public_ip_address_id          = azurerm_public_ip.nodeodm[count.index].id
   }
   tags = merge(local.common_tags)
 }
