@@ -165,7 +165,7 @@ resource "azurerm_linux_virtual_machine" "webodm" {
   size                = var.vmSize
   admin_username      = var.adminUser
   network_interface_ids = [
-    azurerm_network_interface.rg.id,
+    azurerm_network_interface.webodm.*.id,
   ]
   computer_name                   = "${var.prefix}-webodm${count.index}-vm"
   disable_password_authentication = true
@@ -196,7 +196,7 @@ resource "azurerm_linux_virtual_machine" "nodeodm" {
   size                = var.vmSize
   admin_username      = var.adminUser
   network_interface_ids = [
-    azurerm_network_interface.rg.id,
+    azurerm_network_interface.nodeodm.*.id,
   ]
   computer_name                   = "${var.prefix}-nodeodm${count.index}-vm"
   disable_password_authentication = true
