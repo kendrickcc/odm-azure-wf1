@@ -20,6 +20,16 @@ variable "prefix" {
 variable "location" {
   default = "centralus"
 }
+variable "webodm_servers" {
+  description = "Name(s) of WebODM/ClusterODM server."
+  type        = list(string)
+  default     = ["webodm"] # i.e. ["webodm","clusterodm"]
+}
+variable "nodeodm_servers" {
+  description = "Names of nodeODM servers"
+  type        = list(string)
+  default     = ["nodeodm1", "nodeodm2"] # i.e. ["nodeodm1","nodeodm2","nodeodm3"]
+}
 variable "vmSize" {
   default = "Standard_D2s_v3"
   #vmSize = "Standard_D4s_v3"
@@ -44,5 +54,5 @@ variable "storageAccountType" {
   default = "Premium_LRS"
 }
 variable "diskSizeGB" {
-  default = "50"
+  default = "100"
 }

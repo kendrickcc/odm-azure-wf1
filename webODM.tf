@@ -8,12 +8,13 @@ terraform {
       version = "2.95.0"
     }
   }
+  /* disabling the backend
   backend "azurerm" {
     resource_group_name = "odm-rsg"
     #storage_account_name = Stored as a GitHub secret 
     container_name = "tfstates"
     key            = "terraform.tfstate"
-  }
+  } # */
 }
 provider "azurerm" {
   features {}
@@ -80,8 +81,22 @@ resource "azurerm_subnet" "internal" {
   virtual_network_name = azurerm_virtual_network.rg.name
   address_prefixes     = ["10.0.2.0/24"]
 }
-resource "azurerm_network_interface" "rg" {
-  name                = "${var.prefix}-nic"
+resource "azurerm_network_interface" "webodm" {
+  name                = "${var.prefix}-webodm${count.index}-nic"
+  count               = length(var.webodm_servers)
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.internal.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.public_ip.id
+  }
+  tags = merge(local.common_tags)
+}
+resource "azurerm_network_interface" "nodeodm" {
+  name                = "${var.prefix}-nodeodm${count.index}-nic"
+  count               = length(var.nodeodm_servers)
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   ip_configuration {
@@ -143,7 +158,8 @@ resource "azurerm_subnet_network_security_group_association" "sec_group" {
 # Create virtual machines
 #-------------------------------
 resource "azurerm_linux_virtual_machine" "webodm" {
-  name                = "${var.prefix}-webodm-vm"
+  name                = "${var.prefix}-webodm${count.index}-vm"
+  count               = length(var.webodm_servers)
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = var.vmSize
@@ -151,7 +167,7 @@ resource "azurerm_linux_virtual_machine" "webodm" {
   network_interface_ids = [
     azurerm_network_interface.rg.id,
   ]
-  computer_name                   = "${var.prefix}-webodm-vm"
+  computer_name                   = "${var.prefix}-webodm${count.index}-vm"
   disable_password_authentication = true
   custom_data                     = base64encode(data.template_file.webodm.rendered)
 
@@ -173,7 +189,8 @@ resource "azurerm_linux_virtual_machine" "webodm" {
   tags = merge(local.common_tags)
 }
 resource "azurerm_linux_virtual_machine" "nodeodm" {
-  name                = "${var.prefix}-nodeodm-vm"
+  name                = "${var.prefix}-nodeodm${count.index}-vm"
+  count               = length(var.nodeodm_servers)
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = var.vmSize
@@ -181,7 +198,7 @@ resource "azurerm_linux_virtual_machine" "nodeodm" {
   network_interface_ids = [
     azurerm_network_interface.rg.id,
   ]
-  computer_name                   = "${var.prefix}-nodeodm-vm"
+  computer_name                   = "${var.prefix}-nodeodm${count.index}-vm"
   disable_password_authentication = true
   custom_data                     = base64encode(data.template_file.nodeodm.rendered)
 
