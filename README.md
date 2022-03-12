@@ -1,7 +1,5 @@
 # OpenDroneMap build using Terraform in Azure using GitHub workflow actions
 
-***DRAFT***
-
 Provision virtual machines in Azure to run OpenDroneMap. This can all be ran from GitHub using Actions. No need to install Terraform on a local machine. It uses storage account to manage the Terraform state file.
 
 A typical GitHub action will automatically run when a commit is posted. I opted to change the workflows to manual as I often only run a plan to check code, and more importantly, destroy the entire environment when done. I do not keep anything provisioned or running, aside from the storage account backend. The backend can be destroyed between builds. It is most needed when trying to destroy the environment.
