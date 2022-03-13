@@ -61,3 +61,15 @@ variable "storageAccountType" {
 variable "diskSizeGB" {
   default = "100"
 }
+# To get a list of images for your location run
+#    az vm image list --all --publisher Canonical --location centralus --output [table, tsv, json]
+}variable "standard_os" {
+  default = "focal"
+}
+# Definition of the standard OS with "SimpleName" = "publisher,offer,sku"
+variable "standard_os" {
+  default = {
+    "bionic" = "Canonical,UbuntuServer,18_04-lts-gen2"
+    "focal"  = "Canonical,0001-com-ubuntu-server-focal,20_04-lts-gen2"
+  }
+}

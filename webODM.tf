@@ -182,10 +182,10 @@ resource "azurerm_linux_virtual_machine" "webodm" {
   custom_data                     = base64encode(data.template_file.webodm.rendered)
 
   source_image_reference {
-    publisher = var.publisher
-    offer     = var.offer
-    sku       = var.sku
-    version   = var.skuVersion
+    publisher = "${element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 0)}"
+    offer     = "${element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 1)}"
+    sku       = "${element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 2)}"
+    version   = "latest"
   }
   os_disk {
     storage_account_type = var.storageAccountType
@@ -211,12 +211,11 @@ resource "azurerm_linux_virtual_machine" "nodeodm" {
   computer_name                   = "${var.prefix}-nodeodm${count.index}-vm"
   disable_password_authentication = true
   custom_data                     = base64encode(data.template_file.nodeodm.rendered)
-
   source_image_reference {
-    publisher = var.publisher
-    offer     = var.offer
-    sku       = var.sku
-    version   = var.skuVersion
+    publisher = "${element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 0)}"
+    offer     = "${element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 1)}"
+    sku       = "${element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 2)}"
+    version   = "latest"
   }
   os_disk {
     storage_account_type = var.storageAccountType
