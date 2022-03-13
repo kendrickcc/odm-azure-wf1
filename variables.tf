@@ -28,6 +28,12 @@ variable "nodeodm_servers" {
   description = "Number of nodeODM servers"
   default     = 0
 }
+variable "vnet_cidr" {
+  default = "192.168.0.0/16"
+}
+variable "subnet_cidr" {
+  default = "192.168.100.0/24"
+}
 variable "vmSize" {
   default = "Standard_D2s_v3"
   #vmSize = "Standard_D4s_v3"
@@ -43,7 +49,8 @@ variable "offer" {
   default = "UbuntuServer"
 }
 variable "sku" {
-  default = "18_04-lts-gen2"
+  #default = "18_04-lts-gen2"
+  description = "20_04-lts-gen2"
 }
 variable "skuVersion" {
   default = "latest"

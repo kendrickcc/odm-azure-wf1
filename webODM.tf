@@ -8,7 +8,7 @@ terraform {
       version = "2.95.0"
     }
   }
-  #/* disabling the backend
+  #/* disabling the backend, remove the leading "#"
   backend "azurerm" {
     resource_group_name = "odm-rsg"
     #storage_account_name = Stored as a GitHub secret 
@@ -62,7 +62,7 @@ resource "azurerm_resource_group" "rg" {
 #-------------------------------
 resource "azurerm_public_ip" "webodm" {
   name                = "${var.prefix}-webodm${count.index}-pip"
-  count = var.webodm_servers
+  count               = var.webodm_servers
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Dynamic"
@@ -71,7 +71,7 @@ resource "azurerm_public_ip" "webodm" {
 }
 resource "azurerm_public_ip" "nodeodm" {
   name                = "${var.prefix}-nodeodm${count.index}-pip"
-  count = var.nodeodm_servers
+  count               = var.nodeodm_servers
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Dynamic"
@@ -80,7 +80,7 @@ resource "azurerm_public_ip" "nodeodm" {
 }
 resource "azurerm_virtual_network" "rg" {
   name                = "${var.prefix}-network"
-  address_space       = ["10.0.0.0/16"]
+  address_space       = [var.vnet_cidr]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   tags                = merge(local.common_tags)
@@ -89,7 +89,7 @@ resource "azurerm_subnet" "internal" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.rg.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefixes     = [var.subnet_cidr]
 }
 resource "azurerm_network_interface" "webodm" {
   name                = "${var.prefix}-webodm${count.index}-nic"
@@ -125,7 +125,7 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   tags                = merge(local.common_tags)
-   /* when needed to connect to VM 
+  /* when needed to connect to VM, add a leading "#"
   security_rule {
     name                       = "SSH"
     priority                   = 300
