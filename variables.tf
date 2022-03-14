@@ -42,19 +42,6 @@ variable "vmSize" {
 variable "adminUser" {
   default = "ubuntu"
 }
-variable "publisher" {
-  default = "Canonical"
-}
-variable "offer" {
-  default = "UbuntuServer"
-}
-variable "sku" {
-  #default = "18_04-lts-gen2"
-  description = "20_04-lts-gen2"
-}
-variable "skuVersion" {
-  default = "latest"
-}
 variable "storageAccountType" {
   default = "Premium_LRS"
 }
