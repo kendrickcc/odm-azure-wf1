@@ -108,7 +108,7 @@ Progress of the build can be monitored. When complete, navigate to the completed
 
 ***Note:*** It will take a few moments before the web interface is accessible as all the docker containers need to be retrieved. I've found that is 5 minutes. If after 5 minutes, then should access the instance using SSH. Since the IP address changes with each build, your local `known_hosts` file can get a little messy. Therefore I typically launch SSH with the command below.
 
-    ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/[yourPrivateKey].pem ubuntu@[AWS public IP address]
+    ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/[yourPrivateKey].pem ubuntu@[public IP address]
 
 ### Output
 
