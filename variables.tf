@@ -63,7 +63,7 @@ variable "diskSizeGB" {
 }
 # To get a list of images for your location run
 #    az vm image list --all --publisher Canonical --location centralus --output [table, tsv, json]
-variable "standard_os" {
+variable "simple_os" {
   default = "focal"
 }
 # Definition of the standard OS with "SimpleName" = "publisher,offer,sku"

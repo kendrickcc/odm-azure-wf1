@@ -182,9 +182,9 @@ resource "azurerm_linux_virtual_machine" "webodm" {
   custom_data                     = base64encode(data.template_file.webodm.rendered)
 
   source_image_reference {
-    publisher = element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 0)
-    offer     = element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 1)
-    sku       = element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 2)
+    publisher = element(split(",", lookup(var.standard_os, var.os_simple, "")), 0)
+    offer     = element(split(",", lookup(var.standard_os, var.os_simple, "")), 1)
+    sku       = element(split(",", lookup(var.standard_os, var.os_simple, "")), 2)
     version   = "latest"
   }
   os_disk {
@@ -212,9 +212,9 @@ resource "azurerm_linux_virtual_machine" "nodeodm" {
   disable_password_authentication = true
   custom_data                     = base64encode(data.template_file.nodeodm.rendered)
   source_image_reference {
-    publisher = element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 0)
-    offer     = element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 1)
-    sku       = element(split(",", lookup(var.standard_os, var.vm_os_simple, "")), 2)
+    publisher = element(split(",", lookup(var.standard_os, var.os_simple, "")), 0)
+    offer     = element(split(",", lookup(var.standard_os, var.os_simple, "")), 1)
+    sku       = element(split(",", lookup(var.standard_os, var.os_simple, "")), 2)
     version   = "latest"
   }
   os_disk {
