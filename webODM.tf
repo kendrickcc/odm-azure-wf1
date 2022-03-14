@@ -125,7 +125,7 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   tags                = merge(local.common_tags)
-  /* when needed to connect to VM, add a leading "#"
+  #/* when needed to connect to VM, add a leading "#"
   security_rule {
     name                       = "SSH"
     priority                   = 300
