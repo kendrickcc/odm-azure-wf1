@@ -10,6 +10,14 @@ Why Terraform: This provides a fresh clean build for each project. And can easil
 
 ## Setup
 
+### Create SSH key 
+
+Key is used to SCP files between local client and remote resource. Build will copy this and `rclone` setup.
+
+(https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+
+
+
 ### Create Azure Service Principal and Store Account
 
 While possible using the web interface, this approach is a little more straightforward, but does require the installation of Azure CLI. Install Azure CLI per these instructions: (https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
