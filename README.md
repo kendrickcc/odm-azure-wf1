@@ -120,7 +120,7 @@ This workflow is simply there if you need to check the IP addresses again. Howev
 
 ### Terraform State Destroy
 
-Sometimes the state file becomes out of sync, probably due to a change outside of Terraform, i.e. using the AWS Dashboard. This will be evident when Destroy workflow fails. Run this workflow to reset everything.
+Sometimes the state file becomes out of sync, probably due to a change outside of Terraform, i.e. using the Dashboard. This will be evident when Destroy workflow fails. Run this workflow to reset everything.
 
 ## OpenDroneMap
 
