@@ -112,7 +112,7 @@ Progress of the build can be monitored. When complete, navigate to the completed
 
 ### Output
 
-This workflow is simply there if you need to check the IP addresses again. However, since this is pulled from the `terraform.tfstate` file, it won't reflect any changes if made from the AWS console.
+This workflow is simply there if you need to check the IP addresses again. However, since this is pulled from the `terraform.tfstate` file, it won't reflect any changes if made from the console.
 
 ### Destroy
 
